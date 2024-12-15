@@ -24,8 +24,16 @@
 
     // Listen for data from the server
     socket.on("data", function(data) {
+      console.log("Received data from server:", data);
+
       if (data === "1") {
-        buttonState.innerHTML = "pressed";
+        buttonState.innerHTML = "pressed 1";
+        if (data !== current) {
+          var newColor = colorArray[Math.floor(Math.random() * colorArray.length)];
+          shape.style.fill = newColor;
+        }
+      } else if (data === "2") {
+        buttonState.innerHTML = "pressed 2";
         if (data !== current) {
           var newColor = colorArray[Math.floor(Math.random() * colorArray.length)];
           shape.style.fill = newColor;
