@@ -17,8 +17,14 @@ const parser = serialport.pipe(new ReadlineParser({ delimiter: "\n" }));
 app.engine("ejs", require("ejs").__express);
 app.set("view engine", "ejs");
 
+app.use(express.static("public"));
+
 app.get("/", function (req, res) {
     res.render("index");
+    });
+
+app.get("/reverse", function (req, res) {
+    res.render("reverse");
 });
 
 serialport.on("open", function () {
@@ -32,6 +38,13 @@ io.on("connection", function (socket) {
     parser.on("data", function (data) {
         data = data.trim(); // Clean up the data
         socket.emit("data", data); // Emit the data to the connected client
+    });
+
+    socket.on("red", function (data) {
+        serialport.write(data + "T");
+    });
+    socket.on("green", function (data) {
+        serialport.write(data + "T");
     });
 
     socket.on("disconnect", function () {
